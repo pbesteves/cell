@@ -2,9 +2,14 @@ import React from "react";
 import styles from "./Button.module.scss";
 
 export interface ButtonProps {
+  /** A prop that will be rendered inside the button. */
+  /** It can be anything you want. */
   children: React.ReactNode;
+  /** A boolean to specify if the button is disabled or not */
   disabled: boolean;
+  /** A string to specify how the button should be rendered */
   buttonStyle: "solid" | "outline" | "text";
+  /** A function that will be called once the button is clicked */
   onClick(event: React.MouseEvent<HTMLButtonElement>): void;
 }
 

@@ -20,8 +20,13 @@
     transform-origin: top left;
     line-height: 0.5;
   }
+
   .LabelFocused {
     transform: translate(14px, -6px) scale(0.75);
+  }
+
+  .LabelFailure {
+    color: red;
   }
 
   .InputRoot {
@@ -84,6 +89,7 @@
         padding-right: 5px;
       }
     }
+
     .LegendFocused {
       max-width: 1000px;
     }
@@ -92,6 +98,11 @@
   .FieldsetFocused {
     border: 2px solid;
     border-color: black;
+  }
+
+  .FieldsetFocusedFailure {
+    @extend .FieldsetFocused;
+    border-color: red;
   }
 
   .Message {
@@ -103,5 +114,11 @@
   .MessageFailure {
     @extend .Message;
     color: red;
+  }
+
+  .TogglePassword {
+    position: absolute;
+    right: 6px;
+    top: 12px;
   }
 }

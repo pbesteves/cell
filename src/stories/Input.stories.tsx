@@ -23,3 +23,11 @@ WithMessage.args = {
   type: "password",
   message: "Placeholder message",
 };
+export const Error = Template.bind({});
+Error.args = {
+  label: "Password",
+  placeholder: "Password",
+  type: "password",
+  message: "Placeholder message",
+  state: "failure",
+};

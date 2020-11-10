@@ -1,8 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { ReactComponent as ShowPassword } from "../../assets/icons/eye-close.svg";
+import { ReactComponent as HidePassword } from "../../assets/icons/eye-open.svg";
+import setUserStyles from "../../helpers/setCustomClasses";
+import Button from "../Button";
 import styles from "./Input.module.scss";
 
+type Classes = {
+  Root?: string;
+  InputRoot?: string;
+  Input?: string;
+  Label?: string;
+  Legend?: string;
+  Fieldset?: string;
+  Message?: string;
+  MessageFailure?: string;
+  LegendFocused?: string;
+  LabelFocused?: string;
+  LabelFailure?: string;
+  FieldsetFocused?: string;
+  FieldsetFocusedFailure?: string;
+};
+
 export interface InputProps {
-  classes: object;
+  classes: Classes;
   disabled: boolean;
   label: string;
   message: string;
@@ -32,20 +52,30 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  let labelClass = `${styles.Label} `;
-  let legendClass = `${styles.Legend} `;
-  let fieldsetClass = `${styles.Fieldset} `;
+  const userStyle: Classes = setUserStyles(classes, styles);
+
+  let labelClass = `${userStyle.Label} `;
+  let legendClass = `${userStyle.Legend} `;
+  let fieldsetClass = `${userStyle.Fieldset} `;
+
   const messageClass =
-    state === "failure" ? `${styles.MessageFailure}` : `${styles.Message}`;
+    state === "failure"
+      ? `${userStyle.MessageFailure}`
+      : `${userStyle.Message}`;
 
-  legendClass += isFocused ? `${styles.LegendFocused}` : "";
-  labelClass += isFocused ? `${styles.LabelFocused}` : "";
-  fieldsetClass += isFocused ? `${styles.FieldsetFocused}` : ``;
+  legendClass += isFocused ? `${userStyle.LegendFocused}` : "";
+  labelClass += isFocused ? `${userStyle.LabelFocused}` : "";
+  labelClass += state === "failure" ? ` ${userStyle.LabelFailure}` : "";
+
+  fieldsetClass += isFocused ? `${userStyle.FieldsetFocused}` : "";
+  fieldsetClass +=
+    state === "failure" ? ` ${userStyle.FieldsetFocusedFailure}` : "";
 
   const onBlurHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.persist();
-    setIsFocused(false);
+    if (inputValue.length === 0) setIsFocused(false);
     onBlur && onBlur(e);
   };
 
@@ -61,9 +91,17 @@ const Input: React.FC<InputProps> = ({
     onFocus && onFocus(e);
   };
 
+  const togglePassword = (): void => {
+    setShowPassword(!showPassword);
+  };
+
   useEffect(() => {
     setInputValue(value);
   }, [value]);
+
+  useEffect(() => {
+    setIsFocused(inputValue.length > 0);
+  }, [inputValue]);
 
   return (
     <div className={styles.Root}>
@@ -77,8 +115,21 @@ const Input: React.FC<InputProps> = ({
           disabled={disabled}
           required={required}
           value={inputValue}
-          type={type}
+          type={showPassword ? "text" : type}
         />
+        {type === "password" && (
+          <Button
+            classes={styles.TogglePassword}
+            buttonStyle="text"
+            onClick={togglePassword}
+          >
+            {showPassword ? (
+              <HidePassword title="Hide Password" />
+            ) : (
+              <ShowPassword title="Show Password" />
+            )}
+          </Button>
+        )}
         <fieldset className={fieldsetClass}>
           <legend className={legendClass}>
             <span>{placeholder}</span>

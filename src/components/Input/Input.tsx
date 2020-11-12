@@ -21,24 +21,26 @@ type Classes = {
   FieldsetFocusedFailure?: string;
 };
 
-export interface InputProps {
-  classes: Classes;
-  disabled: boolean;
+export type InputProps = {
+  classes?: Classes;
+  disabled?: boolean;
+  id: string;
   label: string;
-  message: string;
+  message?: string;
   placeholder: string;
-  required: boolean;
-  state: "neutral" | "failure";
+  required?: boolean;
+  state?: "neutral" | "failure";
   type: "text" | "email" | "password";
   value: string;
   onBlur(e: React.ChangeEvent<HTMLInputElement>): void;
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
   onFocus(e: React.ChangeEvent<HTMLInputElement>): void;
-}
+};
 
 const Input: React.FC<InputProps> = ({
-  classes,
+  classes = {},
   disabled,
+  id = "",
   label,
   message,
   placeholder,
@@ -104,15 +106,18 @@ const Input: React.FC<InputProps> = ({
   }, [inputValue]);
 
   return (
-    <div className={styles.Root}>
-      <label className={labelClass}>{label}</label>
-      <div className={styles.InputRoot}>
+    <div className={userStyle.Root}>
+      <label htmlFor={id} className={labelClass}>
+        {label}
+      </label>
+      <div className={userStyle.InputRoot}>
         <input
-          className={styles.Input}
+          className={userStyle.Input}
           onBlur={onBlurHandler}
           onChange={onChangeHandler}
           onFocus={onFocusHandler}
           disabled={disabled}
+          id={id}
           required={required}
           value={inputValue}
           type={showPassword ? "text" : type}
